@@ -3,7 +3,9 @@ const bcrypt = require('bcrypt');
 const cors = require('cors');
 const crypto = require('crypto');
 const { Resend } = require('resend');
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resendApiKey = process.env.RESEND_API_KEY;
+const resend = resendApiKey ? new Resend(resendApiKey) : null;
+if (!resend) console.warn("WARNING: RESEND_API_KEY is missing! Emails will be skipped.");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -29,7 +31,7 @@ app.post('/api/intake', async (req, res) => {
     db.leads.push(newLead);
 
     try {
-        await resend.emails.send({
+        if (resend) await resend.emails.send({
             from: 'The Collective <intake@perthconsulting.agency>',
             to: [email],
             subject: 'Secure Request Received - The Collective',
@@ -102,3 +104,4 @@ async function setupMockData() {
     db.users.push({ id: "client_001", email: "client@example.com", passwordHash: hash });
 }
 setupMockData();
+
