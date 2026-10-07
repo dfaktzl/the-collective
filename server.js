@@ -2,6 +2,8 @@
 const bcrypt = require('bcrypt');
 const cors = require('cors');
 const crypto = require('crypto');
+const { Resend } = require('resend');
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -85,3 +87,5 @@ async function setupMockData() {
     db.users.push({ id: "client_001", email: "client@example.com", passwordHash: hash });
 }
 setupMockData();
+
+
