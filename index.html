@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
@@ -60,19 +60,19 @@
                     <p class="text-indigo-400 font-mono mb-6">$249 AUD</p>
                     <ul class="space-y-4 text-gray-400 text-sm mb-8">
                         <li class="flex items-start">
-                            <span class="text-indigo-500 mr-2">✓</span> Secure, encrypted initial consultation.
+                            <span class="text-indigo-500 mr-2">âœ“</span> Secure, encrypted initial consultation.
                         </li>
                         <li class="flex items-start">
-                            <span class="text-indigo-500 mr-2">✓</span> Comprehensive Open-Source Intelligence (OSINT) gathering.
+                            <span class="text-indigo-500 mr-2">âœ“</span> Comprehensive Open-Source Intelligence (OSINT) gathering.
                         </li>
                         <li class="flex items-start">
-                            <span class="text-indigo-500 mr-2">✓</span> Deep social media and digital footprint analysis.
+                            <span class="text-indigo-500 mr-2">âœ“</span> Deep social media and digital footprint analysis.
                         </li>
                         <li class="flex items-start">
-                            <span class="text-indigo-500 mr-2">✓</span> Basic background verification & association mapping.
+                            <span class="text-indigo-500 mr-2">âœ“</span> Basic background verification & association mapping.
                         </li>
                         <li class="flex items-start">
-                            <span class="text-indigo-500 mr-2">✓</span> Finalized, secure summarized findings report.
+                            <span class="text-indigo-500 mr-2">âœ“</span> Finalized, secure summarized findings report.
                         </li>
                     </ul>
                     <a href="#portal" class="block w-full text-center border border-white/20 hover:bg-white/5 py-2 rounded transition">Inquire Now</a>
@@ -111,7 +111,7 @@
             <div>
                 <h3 class="text-2xl font-bold mb-4">The Collective Guarantee</h3>
                 <p class="text-gray-400 mb-4 leading-relaxed">
-                    Our integrity is our currency. If a resolution is not fulfilled, if we hit an insurmountable roadblock and cannot retrieve any actionable intelligence, or if you are simply unhappy with the outcome—you receive a <strong>FULL REFUND</strong> (minus unavoidable hard costs endured during the investigation).
+                    Our integrity is our currency. If a resolution is not fulfilled, if we hit an insurmountable roadblock and cannot retrieve any actionable intelligence, or if you are simply unhappy with the outcomeâ€”you receive a <strong>FULL REFUND</strong> (minus unavoidable hard costs endured during the investigation).
                 </p>
                 <div class="flex items-center space-x-3 mt-6 bg-white/5 p-4 rounded-lg inline-flex border border-white/10">
                     <svg class="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0l8 4v7c0 5.5-3.6 10.7-8 12-4.4-1.3-8-6.5-8-12V4l8-4z"/></svg>
@@ -184,5 +184,85 @@
             }
         });
     </script>
+    <!-- API Integration Script -->
+    <script>
+        const API_URL = 'https://the-collective-hjds.onrender.com/api';
+
+        // Secure Intake Form Handler
+        const contactForm = document.getElementById('contactForm');
+        if(contactForm) {
+            contactForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const inputs = contactForm.querySelectorAll('input:not([type="checkbox"]), textarea');
+                const alias = inputs[0].value;
+                const email = inputs[1].value;
+                const details = inputs[2].value;
+                const subscribeNewsletter = document.getElementById('newsletter').checked;
+                
+                const submitBtn = contactForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerText;
+                submitBtn.innerText = 'Encrypting & Sending...';
+                submitBtn.disabled = true;
+
+                try {
+                    const response = await fetch(API_URL + '/intake', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ alias, email, details, subscribeNewsletter })
+                    });
+                    
+                    const result = await response.json();
+                    if(response.ok) {
+                        alert("Request securely received. We will contact you via the safe email provided.");
+                        contactForm.reset();
+                    } else {
+                        alert(result.error || "An error occurred.");
+                    }
+                } catch (error) {
+                    alert("Secure connection failed. Please try again or email us directly.");
+                } finally {
+                    submitBtn.innerText = originalText;
+                    submitBtn.disabled = false;
+                }
+            });
+        }
+
+        // Client Portal Login Handler
+        const loginForm = document.getElementById('loginForm');
+        if(loginForm) {
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const inputs = loginForm.querySelectorAll('input');
+                const email = inputs[0].value;
+                const password = inputs[1].value;
+
+                const submitBtn = loginForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerText;
+                submitBtn.innerText = 'Authenticating...';
+                submitBtn.disabled = true;
+
+                try {
+                    const response = await fetch(API_URL + '/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password })
+                    });
+                    
+                    const result = await response.json();
+                    if(response.ok) {
+                        alert("Authentication successful. (Portal Dashboard coming soon!)");
+                    } else {
+                        alert(result.error || "Invalid credentials.");
+                    }
+                } catch (error) {
+                    alert("Connection failed.");
+                } finally {
+                    submitBtn.innerText = originalText;
+                    submitBtn.disabled = false;
+                }
+            });
+        }
+    </script>
 </body>
 </html>
+
