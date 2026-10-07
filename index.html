@@ -250,7 +250,8 @@
                     
                     const result = await response.json();
                     if(response.ok) {
-                        alert("Authentication successful. (Portal Dashboard coming soon!)");
+                        localStorage.setItem('collective_token', result.token);
+window.location.href = 'dashboard.html';
                     } else {
                         alert(result.error || "Invalid credentials.");
                     }
@@ -265,4 +266,5 @@
     </script>
 </body>
 </html>
+
 
